@@ -46,6 +46,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/LoginView.vue'),
     meta: { title: '登录' }
   },
+  /* ❌ 既然把老文件也拷过去了，为了保险起见，直接在路由层面切断这两条路的通行，规避报错 ❌
   {
     path: '/register',
     name: 'Register',
@@ -57,6 +58,13 @@ const routes: RouteRecordRaw[] = [
     name: 'VerifyEmail',
     component: () => import('@/views/VerifyEmailView.vue'),
     meta: { title: '验证邮箱' }
+  },
+  */
+  {
+    path: '/pending-verification',
+    name: 'PendingVerification',
+    component: () => import('@/views/PendingVerificationView.vue'),
+    meta: { title: '邮箱验证' }
   },
   {
     path: '/pending-verification',

@@ -11,8 +11,6 @@
 
 **一个基于 Vue 3、FastAPI 和 PostgreSQL 的现代化个人博客系统**
 
-[🌐](https://zhouzhouya.top/) **[Live Preview / 在线预览](https://zhouzhouya.top/)**
-
 ***
 
 **📖 Language / 语言选择**

@@ -1,0 +1,156 @@
+---
+// 聊天悬浮窗组件 - Black & White 配色
+---
+
+<!-- 聊天悬浮按钮 -->
+<div id="chat-fab" class="fixed bottom-6 right-6 z-50 group cursor-pointer" onclick="toggleChatWindow()">
+  <div class="relative">
+    <!-- 脉冲动画背景 -->
+    <div class="absolute inset-0 bg-black rounded-full animate-ping opacity-20"></div>
+    <!-- 主按钮 -->
+    <div class="relative w-14 h-14 bg-black rounded-full flex items-center justify-center shadow-lg hover:shadow-2xl hover:scale-110 transition-all duration-300 ease-out border border-gray-200">
+      <svg id="chat-icon" class="w-7 h-7 text-white transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+      </svg>
+      <svg id="close-icon" class="w-7 h-7 text-white hidden transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </div>
+    <!-- 提示文字 -->
+    <div class="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-black text-white text-sm px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+      AI 智能助手
+      <div class="absolute left-full top-1/2 -translate-y-1/2 border-4 border-transparent border-l-black"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 聊天窗口遮罩 -->
+<div id="chat-overlay" class="fixed inset-0 bg-black/30 z-40 hidden opacity-0 transition-opacity duration-300" onclick="toggleChatWindow()"></div>
+
+<!-- 聊天窗口 -->
+<div id="chat-window" class="fixed inset-0 z-50 hidden opacity-0 flex items-center justify-center p-4 pointer-events-none transition-all duration-300 ease-out">
+  <div class="w-[100%] h-[100%] max-w-7xl bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200 flex flex-col pointer-events-auto transform scale-95 transition-transform duration-300" id="chat-container">
+    <!-- 窗口头部 -->
+    <div class="flex items-center justify-between px-5 py-3 bg-black border-b border-gray-200">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 bg-white/10 rounded-full flex items-center justify-center border border-white/20">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-white font-semibold text-sm">AD 智能助手</h3>
+          <p class="text-gray-400 text-xs">在线 · 随时为您解答</p>
+        </div>
+      </div>
+      <button onclick="toggleChatWindow()" class="w-9 h-9 rounded-full hover:bg-white/10 flex items-center justify-center transition-colors border border-transparent hover:border-white/20">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <!-- iframe 容器 -->
+    <div class="flex-1 bg-gray-50">
+      <iframe 
+        id="chat-iframe"
+        class="w-full h-full border-0"
+        loading="lazy"
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  // 基于用户代理生成唯一用户ID
+  function generateUserId() {
+    const stored = localStorage.getItem('ad_chat_user_id');
+    if (stored) return stored;
+    
+    // 基于 User Agent 生成哈希
+    const ua = navigator.userAgent;
+    let hash = 0;
+    for (let i = 0; i < ua.length; i++) {
+      const char = ua.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    
+    const userId = 'user_' + Math.abs(hash).toString(36) + '_' + Date.now().toString(36);
+    localStorage.setItem('ad_chat_user_id', userId);
+    return userId;
+  }
+
+  // 生成会话ID
+  function generateSessionId() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0;
+      const v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
+  let chatWindowOpen = false;
+  let iframeLoaded = false;
+
+  function toggleChatWindow() {
+    const chatWindow = document.getElementById('chat-window');
+    const chatOverlay = document.getElementById('chat-overlay');
+    const chatContainer = document.getElementById('chat-container');
+    const chatIcon = document.getElementById('chat-icon');
+    const closeIcon = document.getElementById('close-icon');
+    const iframe = document.getElementById('chat-iframe');
+    
+    chatWindowOpen = !chatWindowOpen;
+    
+    if (chatWindowOpen) {
+      // 加载iframe（仅首次）
+      if (!iframeLoaded) {
+        const userId = generateUserId();
+        const sessionId = generateSessionId();
+        iframe.src = `https://chat.aiheadn.cn/chat?session_id=${sessionId}&user_id=${userId}`;
+        iframeLoaded = true;
+      }
+      
+      // 显示遮罩和窗口
+      chatOverlay.classList.remove('hidden');
+      chatWindow.classList.remove('hidden');
+      setTimeout(() => {
+        chatOverlay.classList.remove('opacity-0');
+        chatWindow.classList.remove('opacity-0');
+        chatContainer.classList.remove('scale-95');
+        chatContainer.classList.add('scale-100');
+      }, 10);
+      
+      // 切换图标
+      chatIcon.classList.add('hidden');
+      closeIcon.classList.remove('hidden');
+      
+      // 禁止页面滚动
+      document.body.style.overflow = 'hidden';
+    } else {
+      // 隐藏窗口
+      chatOverlay.classList.add('opacity-0');
+      chatWindow.classList.add('opacity-0');
+      chatContainer.classList.add('scale-95');
+      chatContainer.classList.remove('scale-100');
+      setTimeout(() => {
+        chatOverlay.classList.add('hidden');
+        chatWindow.classList.add('hidden');
+      }, 300);
+      
+      // 切换图标
+      chatIcon.classList.remove('hidden');
+      closeIcon.classList.add('hidden');
+      
+      // 恢复页面滚动
+      document.body.style.overflow = '';
+    }
+  }
+
+  // ESC 键关闭窗口
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && chatWindowOpen) {
+      toggleChatWindow();
+    }
+  });
+</script>

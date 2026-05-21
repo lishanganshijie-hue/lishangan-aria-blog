@@ -1,0 +1,97 @@
+---
+// src/pages/index.astro
+import Button from "../components/button.astro";
+import Projects from "../components/home/projects.astro";
+import Resources from "../components/home/resources.astro";
+import Separator from "../components/home/separator.astro";
+import Writings from "../components/home/writings.astro";
+import Web from "../components/home/web.astro";
+import Layout from "../layouts/main.astro";
+
+// 👑 核心接轨：在大本营这里把网络血管接通
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+let latestPosts = [];
+
+try {
+  // 戳后端的文章列表接口，限制只拿最新的 5 篇（根据你的首页展示习惯调整）
+  const response = await fetch(`${apiUrl}/articles?limit=5`);
+  const data = await response.json();
+  
+  // 对齐后端的 PaginatedResponse 结构，安全取出 items 数组
+  latestPosts = data.items || [];
+} catch (error) {
+  console.error("❌ 首页在静态编译期拉取最新文章失败，请检查 FastAPI 服务:", error);
+}
+---
+
+<Layout title="爱喝ad奶 - 爱你所爱，行你所行">
+  <div
+    class="relative z-20 w-full max-w-4xl mx-auto mt-16 px-7 md:mt-24 lg:mt-32 xl:px-0"
+  >
+    <div class="flex flex-col items-center md:flex-row">
+      <div class="relative w-full md:w-1/2">
+        <h1
+          class="mb-5 text-4xl font-bold leading-tight md:text-4xl lg:text-6xl dark:text-white"
+        >
+          Hello, I'm a.d,
+        </h1>
+        <p class="mb-6 text-base text-neutral-600 dark:text-neutral-400">
+          👋 Hi, I’m ad, Welcome to this page. <br
+            class="hidden lg:block"
+          />I focus on Web programmer.
+        </p>
+        <p class="mb-2 font-semibold text-neutral-800 dark:text-neutral-200">
+          💡 永远年轻，不断挑战✨:
+        </p>
+        <ul
+          class="py-2 space-y-[3px] text-sm list-disc list-inside text-neutral-500 dark:text-neutral-400"
+        >
+          <li>⌨️程序员</li>
+          <li>📷摄影师</li>
+          <li>✏️设计师</li>
+          <li>...</li>
+        </ul>
+        <Button text="Blog" link="https://blog.aiheadn.cn/" />
+      </div>
+      <div
+        class="relative justify-end hidden w-full mt-10 md:flex md:pl-10 md:w-1/2 md:mt-0 md:translate-y-4 xl:translate-y-0"
+      >
+        <div class="relative z-50 w-full">
+          <div
+            class="absolute bottom-0 z-40 w-16 h-16 -translate-x-6 -translate-y-1/2 lg:top-auto top-0 lg:-translate-y-[330px] rounded-full"
+          >
+            <span
+              class="relative z-20 flex items-center justify-center w-full h-full text-2xl border-8 border-white rounded-full dark:border-neutral-950 bg-neutral-100 dark:bg-neutral-900"
+            >
+              <span
+                class="flex items-center justify-center w-full h-full bg-white border border-dashed rounded-full dark:bg-neutral-950 border-neutral-300 dark:border-neutral-700"
+                >👋</span
+              >
+            </span>
+          </div>
+          <div class="relative z-30 px-10">
+            <img
+              src="/assets/images/photo.png"
+              loading="eager"
+              decoding="auto"
+              class="relative z-30 w-full aspect-[790/1189] md:max-w-md mx-auto dark:-translate-y-0.5"
+            />
+          </div>
+          <div
+            class="absolute bottom-0 right-0 z-20 w-full h-full lg:h-[420px] translate-x-0 -translate-y-px border border-dashed rounded-2xl bg-gradient-to-r dark:from-neutral-950 dark:via-black dark:to-neutral-950 from-white via-neutral-50 to-white border-neutral-300 dark:border-neutral-700"
+          >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <Separator text="Product / 原创作品" />
+  <Projects />
+  <Separator text="Ecosystem / 生态" />
+  <Web />
+  <Separator text="writing / 日常记录" />
+  <Writings posts={latestPosts} />
+  <Separator text="Mirror resources / 镜像资源" />
+  <Resources />
+</Layout>

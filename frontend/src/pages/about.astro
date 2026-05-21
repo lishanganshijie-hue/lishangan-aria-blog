@@ -1,0 +1,118 @@
+---
+import experiences from "../collections/experiences.json";
+import skills from "../collections/skills.json";
+import AboutExperience from "../components/about-experience.astro";
+import PageHeading from "../components/page-heading.astro";
+import Layout from "../layouts/main.astro";
+
+type Skill = {
+  category: string;
+  name: string;
+  description: string;
+  icon: string;
+};
+
+const skillList = skills as Skill[];
+
+const groupedSkills = skillList.reduce<Record<string, Skill[]>>((groups, skill) => {
+  const key = skill.category ?? "未分类";
+  if (!groups[key]) {
+    groups[key] = [];
+  }
+  groups[key].push(skill);
+  return groups;
+}, {});
+
+const groupedSkillEntries = Object.entries(groupedSkills);
+---
+
+<Layout title="关于 - 爱喝ad奶">
+  <section class="relative z-20 max-w-2xl mx-auto my-12 px-7 lg:px-0">
+    <PageHeading
+      title="关于 - 爱喝ad奶"
+      description="👋 Hi, I’m ad, Welcome to this page."
+    />
+
+    <img src="/assets/images/about.jpg" class="relative z-30 w-full my-10 rounded-xl" />
+
+    <h2 class="mb-2 text-2xl font-bold dark:text-neutral-200">a.d</h2>
+    <h2
+      class="mt-5 mb-2 text-2xl font-bold lg:mt-10 sm:mt-6 dark:text-neutral-200"
+    >
+      2026年度计划
+    </h2>
+    <ul
+      class="py-2 space-y-[3px] list-disc list-inside dark:text-neutral-200"
+      >
+          <li><a href="https://www.ruankao.org.cn/" >软考高项：系统架构师</a></li>
+          <li>...</li>
+    </ul>
+    {
+      groupedSkillEntries.map(([category, items]) => (
+        <div class="mt-5 lg:mt-10 sm:mt-6">
+          <h2 class="mb-3 text-2xl font-bold dark:text-neutral-200">{category}</h2>
+          <div class="grid grid-cols-1 gap-4 p-4 mb-6 border border-gray-100 rounded-xl shadow-sm sm:grid-cols-2 lg:grid-cols-3 dark:border-neutral-700/60 dark:bg-neutral-900/50">
+            {items.map((skill) => (
+              <div class="group relative flex flex-col items-center gap-3 p-4 overflow-hidden rounded-xl bg-neutral-50 dark:bg-neutral-800/80">
+                <span class="flex items-center justify-center w-20 h-20 rounded-2xl bg-white shadow-inner dark:bg-neutral-900">
+                  <img src={skill.icon} alt={`${skill.name} 图标`} class="w-12 h-12 object-contain" />
+                </span>
+                <div class="text-center transition-opacity duration-200 opacity-40 group-hover:opacity-100">
+                  <p class="text-sm font-semibold tracking-wide text-neutral-900 dark:text-neutral-100">{skill.name}</p>
+                  <p class="text-xs text-neutral-600 dark:text-neutral-400">{skill.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+    <h2
+      class="mt-5 mb-2 text-2xl font-bold lg:mt-10 sm:mt-6 dark:text-neutral-200"
+    >
+
+      经历
+    </h2>
+    <div class="px-5 py-10">
+      {
+        experiences.map((experience, loop) => {
+          return (
+            <>
+              {loop == 0 || loop == 1 ? (
+                <div class="pb-10 border-l border-gray-200 dark:border-neutral-700">
+                  <AboutExperience
+                    dates={experience.dates}
+                    role={experience.role}
+                    company={experience.company}
+                    description={experience.description}
+                  />
+                </div>
+              ) : (
+                <AboutExperience
+                  dates={experience.dates}
+                  role={experience.role}
+                  company={experience.company}
+                  description={experience.description}
+                />
+              )}
+            </>
+          )
+        })
+      }
+    </div>
+    <h2
+      class="mt-5 mb-2 text-2xl font-bold lg:mt-10 sm:mt-6 dark:text-neutral-200"
+    >
+      比赛 & 证书
+    </h2>
+    <ul
+      class="py-2 space-y-[3px] text-sm list-disc list-inside text-neutral-500 dark:text-neutral-400"
+      >
+          <li>软考中项：软件设计师</li>
+          <li>软著两项</li>
+          <li>2021中国大学生计算机设计大赛全国二等奖</li>
+          <li>2023中国大学生计算机设计大赛全省二等奖</li>
+    </ul>
+
+  </section>
+</Layout>

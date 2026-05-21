@@ -1,0 +1,54 @@
+---
+import web from "../collections/web.json";
+import PageHeading from "../components/page-heading.astro";
+import Project from "../components/project.astro";
+import Layout from "../layouts/main.astro";
+// 将站点按 category 分组，便于分类展示
+const categories = web.reduce((acc, item) => {
+  const group = item.category || "未分类";
+  if (!acc[group]) acc[group] = [];
+  acc[group].push(item);
+  return acc;
+}, {});
+---
+
+<Layout title="My web - 爱喝ad奶">
+  <section class="relative z-20 max-w-2xl mx-auto my-12 px-7 lg:px-0">
+    <PageHeading
+      title="My web - 爱喝ad奶"
+      description="生态"
+    />
+
+    {
+      Object.entries(categories).map(([category, sites]) => (
+        <section class="mb-10">
+          <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+            {category}
+          </h3>
+          <div
+            class="z-50 grid items-stretch w-full grid-cols-1 my-5 gap-7 sm:gap-5 sm:grid-cols-3"
+          >
+            {
+              Array.isArray(sites) && sites.map((site) => (
+                <Project
+                  name={site.name}
+                  description={site.description}
+                  image={site.image}
+                  url={site.url}
+                />
+              ))
+            }
+          </div>
+        </section>
+      ))
+    }
+    <div class="my-6 overflow-hidden rounded-xl border border-neutral-200/60 dark:border-neutral-800">
+      <img
+        src="/assets/images/web/ad_web.webp"
+        alt="ad_web"
+        loading="lazy"
+        class="block w-full h-auto"
+      />
+    </div>
+  </section>
+</Layout>

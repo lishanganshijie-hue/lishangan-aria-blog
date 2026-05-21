@@ -1,0 +1,87 @@
+---
+// src/pages/post/[slug].astro
+import MainLayout from "../../layouts/main.astro";
+import { marked } from "marked";
+
+// 1. 👑 静态路由生成：告诉 Astro 编译时要生成哪些文章页面
+export async function getStaticPaths() {
+    // 优先读取本地 .env 中的配置，若没有则回退到本地默认的 8000 端口
+    const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+    
+    try {
+        // 戳后端的文章列表接口
+        const response = await fetch(`${apiUrl}/articles?limit=1000`);
+        const data = await response.json();
+        
+        // 对齐后端的 PaginatedResponse 结构：全量文章包裹在 items 数组中
+        const posts = data.items || [];
+
+        return posts.map((post: any) => ({
+            // 对齐 Schema 中的 post.slug 字段，映射为路由参数 /post/[slug]
+            params: { slug: post.slug },
+            // 将整篇文章的完整数据作为 props 扔给组件渲染层
+            props: { post },
+        }));
+    } catch (error) {
+        console.error("❌ Astro 在编译期拉取后端文章列表失败，请检查 FastAPI 是否正常启动:", error);
+        return [];
+    }
+}
+
+// 2. 🎣 捞取当前路由坑位对应的文章 Pydantic 序列化数据
+const { post } = Astro.props;
+
+// 3. 🛡️ 核心避坑：将后端的纯 Markdown 文本（post.content）编译为标准的 HTML 标签
+const htmlContent = post.content ? marked.parse(post.content) : '';
+---
+
+<MainLayout title={post.title} description={post.summary}>
+    <article class="mx-auto max-w-2xl pt-10 px-4 sm:px-6 lg:px-8">
+        <header class="flex flex-col items-center text-center mb-8">
+            <h1 class="text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-4xl">
+                {post.title}
+            </h1>
+            
+            <div class="mt-4 flex items-center space-x-3 text-sm text-neutral-500">
+                {post.category && (
+                    <span 
+                        class="px-2 py-0.5 rounded text-xs font-medium text-white" 
+                        style={`background-color: ${post.category.color || '#00d4ff'}`}
+                    >
+                        {post.category.name}
+                    </span>
+                )}
+                <span>•</span>
+                <span>{post.reading_time} 分钟阅读</span>
+            </div>
+        </header>
+
+        {post.cover_image && (
+            <div class="mb-8 overflow-hidden rounded-xl">
+                <img 
+                    src={post.cover_image} 
+                    alt={post.title} 
+                    class="w-full h-auto object-cover max-h-[400px]"
+                />
+            </div>
+        )}
+
+        {post.tags && post.tags.length > 0 && (
+            <div class="flex flex-wrap gap-2 mb-6">
+                {post.tags.map((tag: any) => (
+                    <span 
+                        class="text-xs px-2.5 py-1 rounded-full font-medium"
+                        style={`background-color: ${tag.color}20; color: ${tag.color}`}
+                    >
+                        #{tag.name}
+                    </span>
+                ))}
+            </div>
+        )}
+
+        <div 
+            class="prose prose-neutral dark:prose-invert max-w-none lg:prose-lg" 
+            set:html={htmlContent} 
+        />
+    </article>
+</MainLayout>

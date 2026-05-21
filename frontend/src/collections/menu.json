@@ -1,0 +1,22 @@
+[
+	{
+		"name": "首页",
+		"url": "/"
+	},
+	{
+		"name": "博客",
+		"url": "https://blog.aiheadn.cn/"
+	},
+	{
+		"name": "项目",
+		"url": "/projects"
+	},
+    {
+		"name": "生态",
+		"url": "/web"
+	},
+	{
+		"name": "关于",
+		"url": "/about"
+	}
+]

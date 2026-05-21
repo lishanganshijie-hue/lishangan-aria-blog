@@ -1,0 +1,48 @@
+[
+	{
+		"name": "Nodejs镜像站",
+		"description": "Node.js 官方镜像站",
+		"url": "https://nodejs.org/dist/"
+	},
+	{
+		"name": "系统镜像站",
+		"description": "MSDN 系统镜像下载站",
+		"url": "https://msdn.itellyou.cn/"
+	},
+	{
+		"name": "Java镜像站",
+		"description": "华为云 OpenJDK 镜像站",
+		"url": "https://mirrors.huaweicloud.com/openjdk/"
+	},
+	{
+		"name": "Python镜像站",
+		"description": "Python 官方镜像站",
+		"url": "https://python.p2hp.com/"
+	},
+	{
+		"name": "windows资源站",
+		"description": "Windows 资源下载站",
+		"url": "https://www.xxrjm.com/"
+	},
+	{
+		"name": "iconfont矢量图标库",
+		"description": "iconfont 矢量图标库",
+		"url": "https://www.iconfont.cn/"
+	},
+	{
+		"name": "轩辕Dokcer镜像",
+		"description": "轩辕Dokcer镜像",
+		"url": "https://xuanyuan.cloud/"
+	},
+	{
+		"name": "pkmer",
+		"description": "Obsidian 资源站",
+		"url": "https://pkmer.cn/"
+	},
+	{
+		"name": "apkpure",
+		"description": "apk 下载站",
+		"url": "https://apkpure.net/"
+	}
+]
+

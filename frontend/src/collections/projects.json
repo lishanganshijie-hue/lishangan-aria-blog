@@ -1,0 +1,44 @@
+[
+	{
+		"name": "多模态RAG智能问答系统（轻量级）",
+		"description": "基于FastAPI和ChromaDB构建的智能问答系统，支持多模态文档处理、RAG检索增强生成、工具插件系统等功能，提供完整的知识库管理和智能对话能力。",
+		"image": "/assets/images/projects/langchain-module.webp",
+		"url": "/post/langchain-module"
+	},
+	{
+		"name": "fiction 中文网-小说网",
+		"description": "使用 python 中的 Scrapy 爬虫框架将网上的小说源站采集到服务器中，小说书籍和内容分别储存为本地和数据库中，使用 JAVA 和 Vue 编写的小说网站（UI 参考 QQ 阅读），读取爬虫采集的数据库，拥有阅读、分类、详情、排行榜、书架等功能......",
+		"image": "/assets/images/projects/fiction.webp",
+		"url": "/post/fiction"
+	},
+	{
+		"name": "活动管理系统（通用管理系统）",
+		"description": "UI 使用（Pure Admin）项目，前端使用 TypeScript，拥有 CRUD 基本功能、PDF 在线预览、富文本框、Echarts 可视化、导出数据和文件导入批量修改等功能。鉴权是 RPAC 的方式设计角色、权限、用户表。",
+		"image": "/assets/images/projects/am.webp",
+		"url": "/post/activity-manage"
+	},
+	{
+		"name": "Python Wordpress  Generate自动化脚本",
+		"description": "Python Wordpress Generate 是一个功能强大的自动化项目发布工具，旨在简化项目发布流程，提升工作效率。系统采用 Python 开发，支持项目编号自动生成、图片和视频处理、多平台文件上传、WordPress 发布、视频平台发布等核心功能，大大提升了项目发布的效率和便捷性。",
+		"image": "/assets/images/projects/python.webp",
+		"url": "/post/python-wordpress-generate"
+	},
+	{
+		"name": "MySQL 安装脚本生成器",
+		"description": "一个简单易用的 MySQL 安装脚本生成器，支持多种 MySQL 版本，一键生成配置文件和批处理安装脚本，让数据库安装部署变得简单高效。",
+		"image": "/assets/images/projects/mysql-script-generatorl.webp",
+		"url": "/post/mysql-script-generator"
+	},
+	{
+		"name": "PlantUML在线生成可视化",
+		"description": "一个功能丰富、界面现代的 PlantUML 图表在线生成工具可视化。打开网页即可快速创建和下载高质量的 UML 图表。",
+		"image": "/assets/images/projects/plantuml-web.webp",
+		"url": "/post/plantuml-web"
+	},
+	{
+		"name": "RollCode - 在线做题平台",
+		"description": "是一个在线题库做题平台，旨在为编程和其他行业爱好者提供高质量的题目和训练，帮助学习者提高技能和应对挑战的能力.",
+		"image": "/assets/images/projects/rollcode.webp",
+		"url": "/post/roll-code"
+	}
+]

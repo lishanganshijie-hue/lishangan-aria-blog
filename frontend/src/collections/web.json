@@ -1,0 +1,74 @@
+[
+	{
+		"name": "ad博客",
+		"description": "学习、记录、生活.",
+		"image": "/assets/images/web/blog.webp",
+		"url": "https://blog.aiheadn.cn/",
+		"category": "博客生态群"
+	},
+	{
+		"name": "摄影相册",
+		"description": "感动常在.",
+		"image": "/assets/images/web/photo.webp",
+		"url": "https://album.aiheadn.cn/",
+		"category": "博客生态群"
+	},
+	{
+		"name": "Alist云盘",
+		"description": "资源、下载.",
+		"image": "/assets/images/web/alist.webp",
+		"url": "https://cloud.aiheadn.cn/",
+		"category": "博客生态群"
+	},
+	{
+		"name": "Twikoo",
+		"description": "轻量级评论系统.",
+		"image": "/assets/images/web/twikoo.webp",
+		"url": "https://twikoo.aiheadn.cn/",
+		"category": "博客生态群"
+	},
+	{
+		"name": "监控系统",
+		"description": "监测所有站点状态.",
+		"image": "/assets/images/web/monitor.webp",
+		"url": "https://monitor.aiheadn.cn/",
+		"category": "工具链路群"
+	},
+	{
+		"name": "bitwarden",
+		"description": "密码管理托管方案.",
+		"image": "/assets/images/web/bitwarden.webp",
+		"url": "https://password.aiheadn.cn/",
+		"category": "工具链路群"
+	},
+	{
+		"name": "SSL自动化",
+		"description": "自动化SSL证书申请、续期、更新.",
+		"image": "/assets/images/web/ssl.webp",
+		"url": "https://ssl.aiheadn.cn/",
+		"category": "工具链路群"
+	},  		
+	{
+		"name": "umami",
+		"description": "自建网站统计分析系统.",
+		"image": "/assets/images/web/umami.webp",
+		"url": "https://umami.aiheadn.cn/share/YoJJWcygfN5OFo44/www.aiheadn.cn",
+		"category": "工具链路群"
+	},  		
+	{
+		"name": "MySQL 安装脚本生成器",
+		"description": "一个简单易用的 MySQL 安装脚本生成器",
+		"image": "/assets/images/projects/mysql-script-generatorl.webp",
+		"url": "http://web.aiheadn.cn/mysql",
+		"category": "探索"
+	},  		
+	{
+		"name": "PlantUML",
+		"description": "PlantUML在线生成可视化.",
+		"image": "/assets/images/projects/plantuml-web.webp",
+		"url": "http://web.aiheadn.cn/plantuml",
+		"category": "探索"
+	}
+
+
+]

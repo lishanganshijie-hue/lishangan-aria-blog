@@ -1,0 +1,62 @@
+[
+  {
+    "category": "vibe coding",
+    "name": "Cursor",
+    "description": "氛围编码",
+    "icon": "https://cdn.aiheadn.cn/icon/cursor.png"
+  },
+  {
+    "category": "vibe coding",
+    "name": "Trae CN",
+    "description": "氛围编码",
+    "icon": "https://cdn.aiheadn.cn/icon/trae.png"
+  },
+  {
+    "category": "vibe coding",
+    "name": "Claude code",
+    "description": "氛围编码",
+    "icon": "https://cdn.aiheadn.cn/icon/claude.png"
+  },
+  {
+    "category": "编程语言",
+    "name": "Java",
+    "description": "Web 框架 / 微服务框架 / ORM ",
+    "icon": "https://cdn.aiheadn.cn/icon/java.png"
+  },
+  {
+    "category": "编程语言",
+    "name": "Python",
+    "description": "大模型应用 / 爬虫 / 数据处理",
+    "icon": "https://cdn.aiheadn.cn/icon/python.png"
+  },
+  {
+    "category": "编程语言",
+    "name": "前端",
+    "description": "前端框架 / 组件库 / 数据可视化",
+    "icon": "https://cdn.aiheadn.cn/icon/javascript.png"
+  },
+  {
+    "category": "编程语言",
+    "name": "PHP",
+    "description": "模板引擎 / wordpress / typecho",
+    "icon": "https://cdn.aiheadn.cn/icon/php.png"
+  },
+  {
+    "category": "设计工具",
+    "name": "Boardmix",
+    "description": "思维导图 / 流程图 / 原型图",
+    "icon": "https://cdn.aiheadn.cn/icon/boardmix.png"
+  },
+  {
+    "category": "设计工具",
+    "name": "Adobe Photoshop",
+    "description": "图片处理 / 设计 / 切图",
+    "icon": "https://cdn.aiheadn.cn/icon/photoshop.png"
+  },
+  {
+    "category": "设计工具",
+    "name": "Apifox",
+    "description": "API 管理 / 接口测试 / Mock",
+    "icon": "https://cdn.aiheadn.cn/icon/apifox.png"
+  }
+]

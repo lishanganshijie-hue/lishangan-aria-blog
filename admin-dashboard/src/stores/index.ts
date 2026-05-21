@@ -1,11 +1,10 @@
 export { useAuthStore } from './auth'
+export { useBlogStore } from './blog'
 export { useThemeStore } from './theme'
+export { useSiteConfigStore } from './siteConfig'
 export { useDialogStore } from './dialog'
 export { useUserProfileStore } from './userProfile'
+export { useSocialLinksStore } from './socialLinks'
+export { useUserInteractionStore } from './userInteraction'
 export { useInitStore } from './init'
 export { usePermissionStore } from './permission'
-
-// 🔴 已经安全移除以下三个与前台博客、读者点赞收藏相关的 Store 导出：
-// useBlogStore
-// useSocialLinksStore
-// useUserInteractionStore

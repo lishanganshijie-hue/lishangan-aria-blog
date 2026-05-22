@@ -5,12 +5,12 @@ import { marked } from "marked";
 
 // 1. 👑 静态路由生成：告诉 Astro 编译时要生成哪些文章页面
 export async function getStaticPaths() {
-    // 优先读取本地 .env 中的配置，若没有则回退到本地默认的 8000 端口
-    const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+    # 🟢 修正点：将本地默认的 8000 端口，彻底替换为你真实的 Render 后端 API 地址
+    const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://futuristic-blog-api-eh2x.onrender.com/api/v1';
     
     try {
-        // 戳后端的文章列表接口
-        const response = await fetch(`${apiUrl}/articles?limit=1000`);
+        # 🟢 修正点：加上 is_published=true，确保只把你在管理后台勾选了“已发布”的文章生成页面
+        const response = await fetch(`${apiUrl}/articles?limit=1000&is_published=true`);
         const data = await response.json();
         
         // 对齐后端的 PaginatedResponse 结构：全量文章包裹在 items 数组中
@@ -23,12 +23,12 @@ export async function getStaticPaths() {
             props: { post },
         }));
     } catch (error) {
-        console.error("❌ Astro 在编译期拉取后端文章列表失败，请检查 FastAPI 是否正常启动:", error);
+        console.error("❌ Astro 在编译期拉取 Render 后端文章列表失败，请检查 Render 服务是否正常:", error);
         return [];
     }
 }
 
-// 2. 🎣 捞取当前路由坑位对应的文章 Pydantic 序列化数据
+// 2. 🎣 捞取当前路由坑位对应的文章数据
 const { post } = Astro.props;
 
 // 3. 🛡️ 核心避坑：将后端的纯 Markdown 文本（post.content）编译为标准的 HTML 标签

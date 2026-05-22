@@ -58,9 +58,9 @@ class Settings(BaseSettings):
     # ⚡ 补齐 R2/S3 核心变量，允许其读取 Render 的环境变量
     S3_ACCESS_KEY_ID: str = ""
     S3_SECRET_ACCESS_KEY: str = ""
-    S3_ENDPOINT_URL: str = ""    # 👈 补上这一行！
-    S3_BUCKET_NAME: str = ""     # 👈 补上这一行！
-    S3_PUBLIC_URL: str = ""      # 👈 补上这一行！
+    S3_ENDPOINT_URL: str = ""
+    S3_BUCKET_NAME: str = ""
+    S3_PUBLIC_URL: str = ""
     
     USE_SUPABASE_STORAGE: bool = False
     

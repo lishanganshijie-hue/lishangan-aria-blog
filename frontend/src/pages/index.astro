@@ -13,14 +13,14 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:8000/api/v1';
 let latestPosts = [];
 
 try {
-  // 戳后端的文章列表接口，限制只拿最新的 5 篇（根据你的首页展示习惯调整）
-  const response = await fetch(`${apiUrl}/articles?limit=5`);
-  const data = await response.json();
-  
-  // 对齐后端的 PaginatedResponse 结构，安全取出 items 数组
-  latestPosts = data.items || [];
+  // 请求后端发布的文章，限制拿 5 篇。同时增加 is_published=true 过滤，防止草稿泄露
+  const response = await fetch(`${apiUrl}/articles?limit=5&is_published=true`);
+  if (response.ok) {
+    const data = await response.json();
+    latestPosts = data.items || [];
+  }
 } catch (error) {
-  console.error("❌ 首页在静态编译期拉取最新文章失败，请检查 FastAPI 服务:", error);
+  console.error("❌ 首页拉取最新文章失败:", error);
 }
 ---
 

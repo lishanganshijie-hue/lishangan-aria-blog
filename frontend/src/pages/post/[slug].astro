@@ -5,11 +5,11 @@ import { marked } from "marked";
 
 // 1. 👑 静态路由生成：告诉 Astro 编译时要生成哪些文章页面
 export async function getStaticPaths() {
-    # 🟢 修正点：将本地默认的 8000 端口，彻底替换为你真实的 Render 后端 API 地址
+    // 🟢 修正点：将本地默认的 8000 端口，彻底替换为你真实的 Render 后端 API 地址
     const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://futuristic-blog-api-eh2x.onrender.com/api/v1';
     
     try {
-        # 🟢 修正点：加上 is_published=true，确保只把你在管理后台勾选了“已发布”的文章生成页面
+        // 🟢 修正点：加上 is_published=true，确保只把你在管理后台勾选了“已发布”的文章生成页面
         const response = await fetch(`${apiUrl}/articles?limit=1000&is_published=true`);
         const data = await response.json();
         

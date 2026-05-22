@@ -1,7 +1,35 @@
 ---
-import projects from "../../collections/projects.json";
+// src/components/home/projects.astro
+import defaultProjects from "../../collections/projects.json"; // 🟢 更名为后备默认数据
 import Button from "../button.astro";
 import Project from "../project.astro";
+
+// 1. 🌐 连接 Render 后端
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://futuristic-blog-api-eh2x.onrender.com/api/v1';
+let projects = defaultProjects;
+
+try {
+  // 🔗 戳后端的资源/开源项目接口（根据你 FastAPI 的实际路由如 /resources 调整）
+  // 加上 limit=3 可以让后端直接只给 3 条，或者拿到后前端自己切
+  const response = await fetch(`${apiUrl}/resources?limit=10`);
+  if (response.ok) {
+    const data = await response.json();
+    
+    // 对齐后端的 items 包裹结构，如果后端直接回退数组则直接使用 data
+    const remoteItems = data.items || data;
+    
+    if (remoteItems && remoteItems.length > 0) {
+      // 👑 过滤出属于“项目/作品”分类的数据（如果你的 resources 接口把项目和镜像资源混在一起的话）
+      // 如果后端单独有 /projects 路由，直接把上面的 fetch 换成 /projects 即可
+      projects = remoteItems;
+    }
+  }
+} catch (error) {
+  console.error("❌ Projects 组件在静态编译期拉取失败，启用本地 JSON 后备:", error);
+}
+
+// 2. ✂️ 保持首页习惯：在最终渲染时只切出前 3 个项目进行曝光
+const displayProjects = projects.slice(0, 3);
 ---
 
 <section class="max-w-4xl mx-auto px-7 lg:px-0">
@@ -17,12 +45,12 @@ import Project from "../project.astro";
     class="grid items-stretch w-full sm:grid-cols-2 md:grid-cols-3 gap-7 mt-7"
   >
     {
-      projects.slice(0, 3).map((project) => {
+      displayProjects.map((project: any) => {
         return (
           <Project
-            name={project.name}
-            description={project.description}
-            image={project.image}
+            name={project.name || project.title} { /* 🛡️ 双保险：兼容后端返回 name 或 title 字段 */ }
+            description={project.description || project.summary}
+            image={project.image || project.cover_image}
             url={project.url}
           />
         )

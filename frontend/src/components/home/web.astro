@@ -1,37 +1,82 @@
 ---
-import web from "../../collections/web.json";
-import Button from "../button.astro";
-import Project from "../project.astro";
+// src/pages/web.astro
+import defaultWeb from "../collections/web.json"; // 🟢 引入本地死数据作为后备
+import PageHeading from "../components/page-heading.astro";
+import Project from "../components/project.astro";
+import Layout from "../layouts/main.astro";
+
+// ==================== 🛠️ 纯联调测试探针代码开始 ====================
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://futuristic-blog-api-eh2x.onrender.com/api/v1';
+let webItems = defaultWeb;
+
+try {
+  console.log("==================== 🧪 正在向 Render 测发 生态(Web) 页面数据 ====================");
+  
+  // 🔗 测发资源接口（附带 type=web 条件，可以根据后台习惯微调）
+  const response = await fetch(`${apiUrl}/resources?type=web&limit=50`);
+  
+  if (response.ok) {
+    const rawData = await response.json();
+    console.log("🟢 成功连接到后端生态(Web)接口！Render 返回的原始结构如下：\n", JSON.stringify(rawData, null, 2));
+    
+    // 【维度盲区预防】：如果想直接测试后端数据，可以取消下面这行的注释
+    // const remoteItems = rawData.items || rawData;
+    // if (remoteItems && remoteItems.length > 0) webItems = remoteItems;
+  } else {
+    console.log(`⚠️ 生态接口状态码异常: ${response.status}，已启动本地 web.json 降级。`);
+  }
+} catch (e) {
+  console.log("❌ 测发生态数据失败（可能后端没这个路由），已完美隔离，错误原因:", (e as any).message);
+}
+// ==================== 🛠️ 纯联调测试探针代码结束 ====================
+
+// 将站点按 category 分组，便于分类展示（这里动态融合了后端或本地的数据源）
+const categories = webItems.reduce((acc: any, item: any) => {
+  // 🛡️ 字段兼容保护：如果后端返回的是 category_name 或其它，可以这里兼容如 item.category_name || item.category
+  const group = item.category || "未分类";
+  if (!acc[group]) acc[group] = [];
+  acc[group].push(item);
+  return acc;
+}, {});
 ---
 
-<section class="max-w-4xl mx-auto px-7 lg:px-0">
-  <h2
-    class="text-2xl font-bold leading-10 tracking-tight text-neutral-900 dark:text-neutral-100"
-  >
-    My Ecosystem
-  </h2>
-  <p class="mb-6 text-base text-neutral-600 dark:text-neutral-400">
-    生态系统群
-  </p>
-  <div
-    class="grid items-stretch w-full sm:grid-cols-2 md:grid-cols-3 gap-7 mt-7"
-  >
+<Layout title="My web - 爱喝ad奶">
+  <section class="relative z-20 max-w-2xl mx-auto my-12 px-7 lg:px-0">
+    <PageHeading
+      title="My web - 爱喝ad奶"
+      description="生态"
+    />
+
     {
-      web.slice(0, 3).map((item) => {
-        return (
-          <Project
-            name={item.name}
-            description={item.description}
-            image={item.image}
-            url={item.url}
-          />
-        )
-      })
+      Object.entries(categories).map(([category, sites]) => (
+        <section class="mb-10">
+          <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+            {category}
+          </h3>
+          <div
+            class="z-50 grid items-stretch w-full grid-cols-1 my-5 gap-7 sm:gap-5 sm:grid-cols-3"
+          >
+            {
+              Array.isArray(sites) && sites.map((site: any) => (
+                <Project
+                  name={site.name || site.title} { /* 🛡️ 双保险：兼容 name 或 title */ }
+                  description={site.description || site.summary}
+                  image={site.image || site.cover_image}
+                  url={site.url}
+                />
+              ))
+            }
+          </div>
+        </section>
+      ))
     }
-  </div>
-
-  <div class="flex items-center justify-center w-full py-5">
-    <Button text="查看更多" link="/web" />
-  </div>
-</section>
-
+    <div class="my-6 overflow-hidden rounded-xl border border-neutral-200/60 dark:border-neutral-800">
+      <img
+        src="/assets/images/web/ad_web.webp"
+        alt="ad_web"
+        loading="lazy"
+        class="block w-full h-auto"
+      />
+    </div>
+  </section>
+</Layout>

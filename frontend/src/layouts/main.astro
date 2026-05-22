@@ -1,18 +1,69 @@
 ---
+// src/layouts/main.astro
 import Footer from "../components/footer.astro";
 import Header from "../components/header.astro";
 import SquareLines from "../components/square-lines.astro";
-const { title } = Astro.props;
+
+// 1. 🎣 接收从各页面（首页、文章详情页）塞进来的专属属性
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const { 
+  title: pageTitle, 
+  description: pageDescription, 
+  image: pageImage 
+} = Astro.props;
+
+// 2. 🌐 连接 Render 后端，拉取管理后台配置的网站全局维度
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://futuristic-blog-api-eh2x.onrender.com/api/v1';
+
+let siteConfig = {
+  site_name: "爱喝ad奶",
+  site_description: "爱你所爱，行你所行",
+  site_keywords: "博客, 程序员, 摄影, 设计",
+  favicon_url: "https://www.aiheadn.cn/favicon.ico",
+  umami_url: "https://umami.aiheadn.cn/script.js",
+  umami_id: "2da92f2b-a6b3-43f7-bd15-44aa17a8c760"
+};
+
+try {
+  // 🔗 戳你后端的系统配置接口（请根据你 FastAPI 的真实路由如 /site-config 或 /settings 调整）
+  const response = await fetch(`${apiUrl}/site-config`);
+  if (response.ok) {
+    const data = await response.json();
+    // 融合后端数据
+    siteConfig = { ...siteConfig, ...data };
+  }
+} catch (error) {
+  console.error("❌ MainLayout 编译期拉取云端系统设置失败，启用本地硬编码后备:", error);
+}
+
+// 3. 🛡️ 智能计算最终展现的标题和 SEO 信息
+// 如果是文章页，显示“文章标题 - 网站名”；如果是首页，直接显示页面传入的标题
+const finalTitle = pageTitle ? (pageTitle.includes(siteConfig.site_name) ? pageTitle : `${pageTitle}`) : siteConfig.site_name;
+const finalDescription = pageDescription || siteConfig.site_description;
+const finalKeywords = siteConfig.site_keywords;
+const finalFavicon = siteConfig.favicon_url;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
+    <title>{finalTitle}</title>
 
-    <!-- Used to add dark mode right away, adding here prevents any flicker -->
+    <meta name="description" content={finalDescription} />
+    <meta name="keywords" content={finalKeywords} />
+    
+    <meta property="og:title" content={finalTitle} />
+    <meta property="og:description" content={finalDescription} />
+    <meta property="og:type" content="website" />
+    {pageImage && <meta property="og:image" content={pageImage} />}
+
     <script is:inline>
       if (typeof Storage !== 'undefined') {
         if (
@@ -29,9 +80,20 @@ const { title } = Astro.props;
         border-radius: 20px;
       }
     </style>
-    <link rel="icon" type="image/x-icon" href="https://www.aiheadn.cn/favicon.ico" />
+    
+    <link rel="icon" type="image/x-icon" href={finalFavicon} />
+    
     <script src="../assets/css/main.css"></script>
-    <script is:inline defer src="https://umami.aiheadn.cn/script.js" data-website-id="2da92f2b-a6b3-43f7-bd15-44aa17a8c760"></script>
+    
+    {siteConfig.umami_url && siteConfig.umami_id && (
+      <script 
+        is:inline 
+        defer 
+        src={siteConfig.umami_url} 
+        data-website-id={siteConfig.umami_id}
+      />
+    )}
+    
     <Fragment set:html={import.meta.env.HEADER_INJECT} />
   </head>
   <body class="antialiased bg-white dark:bg-neutral-950">

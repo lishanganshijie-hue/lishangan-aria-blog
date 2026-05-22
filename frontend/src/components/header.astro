@@ -1,9 +1,29 @@
 ---
-import menus from "../collections/menu.json";
+// src/components/header.astro
+import defaultMenus from "../collections/menu.json"; // 🟢 将本地死数据更名为默认后备菜单
 import Logo from "../components/logo.astro";
+
+// 1. 🌐 连接 Render 后端，拉取管理后台配置的导航维度
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'https://futuristic-blog-api-eh2x.onrender.com/api/v1';
+let menus = defaultMenus; // 默认初始化为本地配置
+
+try {
+  // 🔗 戳你后端的系统配置/菜单接口（根据你 FastAPI 实际对齐 Vue 的接口微调，如 /site-config 或 /menus）
+  const response = await fetch(`${apiUrl}/site-config`);
+  if (response.ok) {
+    const data = await response.json();
+    // 👑 对齐管理后台维度：假设后台把菜单数组存放在 data.nav_menus 或 data.menus 里
+    if (data.nav_menus && data.nav_menus.length > 0) {
+      menus = data.nav_menus;
+    } else if (data.menus && data.menus.length > 0) {
+      menus = data.menus;
+    }
+  }
+} catch (error) {
+  console.error("❌ Header 编译期拉取云端导航菜单失败，启用本地 menu.json 后备:", error);
+}
 ---
 
-<!-- This is an invisible div with relative position so that it takes up the height of the menu (because menu is absolute/fixed) -->
 <div class="relative w-full h-20 opacity-0 pointer-events-none"></div>
 <header id="header" class="absolute top-0 z-50 w-full h-20">
   <div

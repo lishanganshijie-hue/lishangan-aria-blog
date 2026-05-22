@@ -1,3 +1,17 @@
 {
-	"extends": "astro/tsconfigs/base"
+  "extends": "astro/tsconfigs/base",
+  "compilerOptions": {
+    /* 🟢 核心修正点：允许不用花括号，直接进行默认导入 */
+    "allowSyntheticDefaultImports": true,
+    
+    /* 🟢 核心修正点：开启 ESM 模块交互，让 TS 认识并允许导入 .json 文件 */
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    
+    /* 🟢 辅助修正点：确保编辑器能正确解析绝对路径和极其严格的变量检查 */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  }
 }
